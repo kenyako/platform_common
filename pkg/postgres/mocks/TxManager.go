@@ -5,7 +5,7 @@ package postgresmocks
 import (
 	context "context"
 
-	postgres "github.com/kenyako/platform_common/pkg/client/postgres"
+	postgres "github.com/kenyako/platform_common/pkg/postgres"
 	mock "github.com/stretchr/testify/mock"
 )
 
