@@ -65,7 +65,7 @@ func (m *txManager) transaction(ctx context.Context, opts pgx.TxOptions, fn Hand
 	defer func() {
 
 		if r := recover(); r != nil {
-			err = errors.Errorf("panic recovered: #{r}")
+			err = errors.Errorf("panic recovered: %v", r)
 		}
 
 		if err != nil {
