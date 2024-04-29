@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-//go:generate ../../../bin/mockery --name=Postgres --output=./mocks
+//go:generate ../../bin/mockery --name=Postgres --output=./mocks
 type Postgres interface {
 	ExecContext(ctx context.Context, q Query, args ...interface{}) (pgconn.CommandTag, error)
 	QueryContext(ctx context.Context, q Query, args ...interface{}) (pgx.Rows, error)
@@ -21,8 +21,6 @@ type Postgres interface {
 	ScanAllContext(ctx context.Context, dest interface{}, q Query, args ...interface{}) error
 
 	BeginTx(ctx context.Context, txOptions pgx.TxOptions) (Tx, error)
-
-	// Pool() *pgxpool.Pool
 
 	Ping(ctx context.Context) error
 
