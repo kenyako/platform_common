@@ -29,13 +29,7 @@ type Tx interface {
 	Conn() *pgx.Conn
 }
 
-// type txKey struct{}
-
-type key string
-
-const (
-	TxKey key = "tx"
-)
+type txKey struct{}
 
 //go:generate ../../bin/mockery --name=TxManager --output=./mocks
 type TxManager interface {
@@ -103,11 +97,11 @@ func (m *txManager) ReadCommitted(ctx context.Context, f Handler) error {
 }
 
 func InjectTx(ctx context.Context, tx Tx) context.Context {
-	return context.WithValue(ctx, TxKey, tx)
+	return context.WithValue(ctx, txKey{}, tx)
 }
 
 func ExtractTx(ctx context.Context) (Tx, bool) {
-	tx, ok := ctx.Value(TxKey).(Tx)
+	tx, ok := ctx.Value(txKey{}).(Tx)
 
 	return tx, ok
 }
