@@ -104,39 +104,6 @@ func (_m *Postgres) Ping(ctx context.Context) error {
 	return r0
 }
 
-// Query provides a mock function with given fields: ctx, sql, args
-func (_m *Postgres) Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error) {
-	var _ca []interface{}
-	_ca = append(_ca, ctx, sql)
-	_ca = append(_ca, args...)
-	ret := _m.Called(_ca...)
-
-	if len(ret) == 0 {
-		panic("no return value specified for Query")
-	}
-
-	var r0 pgx.Rows
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string, ...interface{}) (pgx.Rows, error)); ok {
-		return rf(ctx, sql, args...)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, string, ...interface{}) pgx.Rows); ok {
-		r0 = rf(ctx, sql, args...)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(pgx.Rows)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, string, ...interface{}) error); ok {
-		r1 = rf(ctx, sql, args...)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
 // QueryContext provides a mock function with given fields: ctx, q, args
 func (_m *Postgres) QueryContext(ctx context.Context, q postgres.Query, args ...interface{}) (pgx.Rows, error) {
 	var _ca []interface{}
