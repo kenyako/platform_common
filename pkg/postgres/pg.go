@@ -15,6 +15,8 @@ type Postgres interface {
 	QueryContext(ctx context.Context, q Query, args ...interface{}) (pgx.Rows, error)
 	QueryRowContext(ctx context.Context, q Query, args ...interface{}) pgx.Row
 
+	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
+
 	ScanOneContext(ctx context.Context, dest interface{}, q Query, args ...interface{}) error
 	ScanAllContext(ctx context.Context, dest interface{}, q Query, args ...interface{}) error
 
@@ -90,6 +92,15 @@ func (p *pg) QueryRowContext(ctx context.Context, q Query, args ...interface{}) 
 	}
 
 	return p.dbc.QueryRow(ctx, q.QueryRaw, args...)
+}
+
+func (p *pg) Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error) {
+	tx, ok := ExtractTx(ctx)
+	if ok {
+		tx.Query(ctx, sql, args...)
+	}
+
+	return p.dbc.Query(ctx, sql, args...)
 }
 
 func (p *pg) BeginTx(ctx context.Context, txOptions pgx.TxOptions) (Tx, error) {
