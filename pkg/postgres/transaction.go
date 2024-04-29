@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-//go:generate ../../../bin/mockery --name=Tx --output=./mocks
+//go:generate ../../bin/mockery --name=Tx --output=./mocks
 type Tx interface {
 	Begin(ctx context.Context) (pgx.Tx, error)
 
@@ -29,9 +29,15 @@ type Tx interface {
 	Conn() *pgx.Conn
 }
 
-type txKey struct{}
+// type txKey struct{}
 
-//go:generate ../../../bin/mockery --name=TxManager --output=./mocks
+type key string
+
+const (
+	TxKey key = "tx"
+)
+
+//go:generate ../../bin/mockery --name=TxManager --output=./mocks
 type TxManager interface {
 	ReadCommitted(ctx context.Context, f Handler) error
 }
@@ -97,11 +103,11 @@ func (m *txManager) ReadCommitted(ctx context.Context, f Handler) error {
 }
 
 func InjectTx(ctx context.Context, tx Tx) context.Context {
-	return context.WithValue(ctx, txKey{}, tx)
+	return context.WithValue(ctx, TxKey, tx)
 }
 
 func ExtractTx(ctx context.Context) (Tx, bool) {
-	tx, ok := ctx.Value(txKey{}).(Tx)
+	tx, ok := ctx.Value(TxKey).(Tx)
 
 	return tx, ok
 }
